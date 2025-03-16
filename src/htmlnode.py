@@ -16,7 +16,7 @@ class HTMLNode():
         res = ""
         for key in self.props.keys():
             res += f" {key}=\"{self.props[key]}\""
-        return res[1::]
+        return res
     
     def __repr__(self):
         return f"""HTML Node: 
