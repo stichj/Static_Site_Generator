@@ -78,3 +78,68 @@ def extract_markdown_links(text):
     pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
     matches = re.findall(pattern, text)
     return matches
+
+def split_nodes_image(old_nodes):
+    new_nodes = []
+    for node in old_nodes:
+        
+        if node.text is None or node.text == "":
+            continue
+        matches = extract_markdown_images(node.text)
+        
+        if not matches:
+            new_nodes.append(TextNode(node.text, node.text_type))
+            continue
+        
+        curr_string = node.text
+        for alt_text, url in matches:
+            nodes, rest = compose_text_node_list(alt_text, url, curr_string, node.text_type, TextType.IMAGE)
+            new_nodes.extend(nodes)
+            curr_string = rest
+            
+        if curr_string != "":
+            new_nodes.append(TextNode(curr_string, node.text_type))
+            
+    return new_nodes
+
+def split_nodes_link(old_nodes):
+    new_nodes = []
+    for node in old_nodes:
+        
+        if node.text == "":
+            continue
+        matches = extract_markdown_links(node.text)
+        
+        if not matches:
+            new_nodes.append(TextNode(node.text, node.text_type))
+            continue
+        
+        curr_string = node.text
+        for alt_text, url in matches:
+            nodes, rest = compose_text_node_list(alt_text, url, curr_string, node.text_type, TextType.LINK)
+            new_nodes.extend(nodes)
+            curr_string = rest
+            
+        if curr_string is not None or curr_string != "":
+            new_nodes.append(TextNode(curr_string, node.text_type))
+    return new_nodes
+
+def compose_text_node_list(alt_text, url, text, regular_text_type, link_type):
+    new_nodes = []
+    if link_type is TextType.LINK:
+        split = text.split(f'[{alt_text}]({url})', maxsplit=1)
+    elif link_type is TextType.IMAGE:
+        split = text.split(f'![{alt_text}]({url})', maxsplit=1)
+    else:
+        raise TypeError("Illegal TextType provided")
+            
+    if split is None:
+        new_nodes.append([TextNode(alt_text, link_type, url)])
+        return []
+    
+    if split[0] != "" and split[0] is not None:
+        new_nodes.append(TextNode(split[0], regular_text_type))
+    
+    new_nodes.append(TextNode(alt_text, link_type, url))
+    
+    return new_nodes, split[1]
