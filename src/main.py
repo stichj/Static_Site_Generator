@@ -8,8 +8,21 @@ from generatepage import generate_page
 
 def main():
     init_public_dir()
-    generate_page("content/index.md", "template.html", "public/index.html")
+    #generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
     
+    
+def generate_pages_recursive(content_dir_path, template_path, dest_dir_path):
+    
+    if not os.path.exists(content_dir_path) or not os.path.isdir(content_dir_path):
+        raise FileExistsError(content_dir_path, "was not found or is not a directory")
+    
+    for path in os.listdir(content_dir_path):
+        if os.path.isdir(os.path.join("", content_dir_path, path)):
+            generate_pages_recursive(os.path.join("", content_dir_path, path), template_path, os.path.join("", dest_dir_path, path))
+        if os.path.isfile(os.path.join("", content_dir_path, path)):
+            generate_page(os.path.join("", content_dir_path, path), template_path, os.path.join("", dest_dir_path, path[:-2] + "html"))
+            
     
     
 def init_public_dir():
