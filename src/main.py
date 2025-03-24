@@ -3,10 +3,13 @@ import os
 
 from textnode import *
 from htmlnode import *
+from generatepage import generate_page
 
 
 def main():
     init_public_dir()
+    generate_page("content/index.md", "template.html", "public/index.html")
+    
     
     
 def init_public_dir():
