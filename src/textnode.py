@@ -156,3 +156,38 @@ def text_to_text_nodes(text):
     nodes = split_nodes_link(nodes)
     
     return nodes
+
+def markdown_to_blocks(markdown):
+    blocks = []
+    
+    blocks = markdown.split("\n\n")
+    
+    blocks = [block.strip() for block in blocks if block.strip()]
+    
+    #print("Blocks after splitting double linebreak")
+    #print(blocks)
+    
+    for i in range(len(blocks)):
+        #print("Block before stripping white space")
+        #print(blocks[i])
+        blocks[i] = blocks[i].strip()
+        
+        #print("Block after stripping white space")
+        #print(blocks[i])
+        
+        single_block = blocks[i].split("\n")
+        
+        if len(single_block) > 1:
+            #print("Block with linebreak!!!")
+            #print(single_block)
+            for j in range(len(single_block)):
+                single_block[j] = single_block[j].strip()
+                blocks[i] = "\n".join(single_block)
+            
+            #print("Multiline block after split and linebreak")
+            #print(blocks[i])
+        #print(f"Blocks after round {i}: {blocks}")    
+    #print("Final blocks:")
+    #print(blocks)
+    
+    return blocks
