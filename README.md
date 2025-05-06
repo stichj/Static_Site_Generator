@@ -32,7 +32,7 @@ python3 --version
 Clone the repository:
 ```bash
 git clone https://github.com/stichj/Static_Site_Generator.git
-cd Static-Site-Generator
+cd Static_Site_Generator
 ```
 
 ### Running the Static Site Generator
