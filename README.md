@@ -38,8 +38,7 @@ cd Static_Site_Generator
 ### Running the Static Site Generator
 
 1. You can run the generator by running `main.sh`:
-```
-bash
+```bash
 ./main.sh 
 ```
 The script will automatically generate the HTML files and launch a local web server.
